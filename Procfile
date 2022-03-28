@@ -1,0 +1,1 @@
+web: gunicorn good_browser_games.wsgi --log-file -
