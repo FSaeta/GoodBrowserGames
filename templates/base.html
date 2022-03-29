@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<!-- HEAD -->
+<head>
+    <title>{% block title %} Good Browser Games {% endblock %}</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- STYLES -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/simplegrid.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lightcase.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+</head>
+
+<!-- BODY -->
+<body class="body" id="home">
+
+<!-- HEADER -->
+{% include 'header.html' %}
+
+<!-- BLOCK PRINCIPAL -->
+<div class="container">
+    {% block content %} {% endblock %}
+</div>
+<!-- FOOTER -->
+<!-- { include 'footer.html' } -->
+
+</body>
+</html>
