@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="parallax-section parallax1">
+    <div class="grid grid-pad">
+        <div class="col-1-1">
+            <div class="content content-header" style="max-width: 600px;">
+                <h3 style="margin: -30px auto 10px;">Cadastre-se</h3>
+                <h4 style="color: #fff;">ou <a href="{% url 'login' %}">Login</a></h4>
+                
+                <form action="{% url 'cadastro_usuario' %}" method="post" enctype="multipart/form-data" 
+                      class="validate-form login-form" id="login-form">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input class="btn btn-ghost login-btn" type="submit" value="Cadastrar">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

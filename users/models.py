@@ -1,7 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+from django.apps import apps
+
 import datetime
+import pycountry
+
+
+class Pais(models.Model):
+
+    sigla = models.CharField(verbose_name='Sigla', max_length=3)
+    nome = models.CharField(verbose_name='Nome', max_length=255)
+
+    def __str__(self):
+        return f'{self.nome} ({self.sigla})'
+
+    def add_paises():
+        for country in pycountry.countries:
+            new_country = Pais(sigla=country.alpha_3, nome=country.name)
+            new_country.save()
+            print(f"País '{country.name}' foi carregado.")
+        print("Todos os Países foram carregados !")
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -27,18 +47,15 @@ class UserManager(BaseUserManager):
         return self._create_user(username, email, first_name, last_name, password, **extra_fields)
 
 
-
 class User(AbstractUser):
     email = models.EmailField(
         'E-mail', unique=True)
 
-    #estado = models.CharField(
-    #    'Estado', max_length=2,
-    #    choices=ESTADOS)
-    #
-    #pais = models.CharField(
-    #    'Pais', max_length=10,
-    #    choices=CIDADES)
+    estado = models.CharField(
+        'Estado', max_length=255, default="São Paulo", blank=False)
+
+    pais = models.ForeignKey(
+        Pais, verbose_name='Pais', on_delete=models.RESTRICT, blank=False, null=True)
 
     data_nascimento = models.DateField(
         "Data de Nascimento")
@@ -59,4 +76,8 @@ class User(AbstractUser):
             'cidade': self.cidade,
             'data_nascimento': self.data_nascimento
         }
+
+    def get_games_to_show(self):
+        import pdb; pdb.set_trace()
+        Games = apps.get_model('games', 'BrowserGame')
 
