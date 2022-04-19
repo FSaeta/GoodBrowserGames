@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="parallax-section parallax1">
+    <div class="grid grid-pad">
+        <div class="col-1-1">
+            <div class="content content-header" style="max-width: 600px;">
+                
+                {% if not user.is_authenticated %}
+
+                <h3 style="margin-top: -30px;">Entrar</h3>
+
+                <form class="validate-form login-form" action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% comment %} form.as_p().split('</p>', 1)[1].replace('<p>', '<p style="margin-bottom:10px;">') {% endcomment %}
+                    <input class="btn btn-ghost login-btn" type="Submit" value="Logar">
+                    <br/> ou <a href="{% url 'cadastro_usuario' %}">
+                        Cadastre-se
+                    </a>
+                </form>
+
+                {% else %}
+
+                <h1 style="color: #fff;"> Você já está Autenticado !</h1>
+                <a class="btn btn-best-plan" href="{% url 'index' %}">Home</a>
+                <a class="btn btn-ghost" href="{% url 'logout' %}">Logout</a>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

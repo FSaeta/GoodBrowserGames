@@ -6,7 +6,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('games.urls'))
+    path('auth/', include('django.contrib.auth.urls')),
+    path('', include('games.urls')),
+    path('user/', include('users.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = 'Admin Good Browser Games'
