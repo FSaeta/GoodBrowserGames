@@ -55,6 +55,14 @@ class Avaliacao(models.Model):
     comentario = models.TextField(
         "Comentário", max_length=255, null=True, blank=True)
 
+    create_date = models.DateTimeField(
+        "Data de Criação", auto_now=True, blank=True)
+
+    users_liked = models.ManyToManyField(
+        User, 
+        verbose_name="Users Liked",
+        related_name="liked_avaliacoes")
+
     class Meta:
         verbose_name = "Avaliação"
         verbose_name_plural = "Avaliações"
