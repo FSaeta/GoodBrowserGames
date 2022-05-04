@@ -10,6 +10,14 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
+    def carregar_categorias_padrao():
+        categorias = ['Strategy', 'Shooter', 'Puzzle', 'Arcade', 'RPG', 'Sports', 'Action', 'Adventure']
+        for name in categorias: 
+            categoria = Categoria(nome=name)
+            categoria.save()
+            print(f"Categoria '{name}' foi carregada.")
+        print("Todas as Categorias foram carregadas !")
+
 
 class BrowserGame(models.Model):
     nome = models.CharField("Nome", max_length=255, unique=True)
