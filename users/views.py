@@ -31,21 +31,23 @@ class Relatorio:
     def compute_objects(self):
         objs_grouped = self.class_obj.objects.annotate(av_count=Count('avaliacao__id'))
 
-        import pdb; pdb.set_trace()
-        if self.start:
-            objs_grouped.filter(avaliacao__create_date__gte=self.start)
-        if self.stop:
-            objs_grouped.filter(avaliacao__create_date__lte=self.stop)
+        objs_grouped = self.filter_date_objs(objs_grouped)
 
         values = [x for x in objs_grouped.order_by('-av_count')[:self.top].values('av_count', 'nome')]
         [values[x].update({'pos': x+1}) for x in range(len(values))]
         return values
 
+    def filter_date_objs(self, objs):
+        if self.start:
+            objs.filter(avaliacao__create_date__gte=self.start)
+        if self.stop:
+            objs.filter(avaliacao__create_date__lte=self.stop)
+        return objs
+
 class RelatorioCategorias(Relatorio):
     def compute_objects(self):
-        import pdb; pdb.set_trace()
         objs_grouped = self.class_obj.objects.annotate(
-            av_count=Count('browsergame_avaliacao__id')
+            av_count=Count('browsergame__avaliacao__id')
         )
         if self.start:
             objs_grouped.filter(browsergame__avaliacao__create_date__gte=self.start)
@@ -55,31 +57,52 @@ class RelatorioCategorias(Relatorio):
         values = [x for x in objs_grouped.order_by('-av_count')[:self.top].values('av_count', 'nome')]
         [values[x].update({'pos': x+1}) for x in range(len(values))]
 
+        return values
+
+class RelatorioUsers(Relatorio):
+    def compute_objects(self):
+        objs_grouped = self.class_obj.objects.annotate(
+            av_count=Count('avaliacao__id')
+        )
+        objs_grouped = self.filter_date_objs(objs_grouped)
+
+        values = [x for x in objs_grouped.order_by('-av_count')[:self.top].values('av_count', 'username')]
+        [values[x].update({'pos': x+1}) for x in range(len(values))]
+
+        return values
+
 
 class RelatorioMediaGames(Relatorio):
     def compute_objects(self):
-        import pdb; pdb.set_trace()
         objs_grouped = self.class_obj.objects.annotate(
             av_media=Avg('avaliacao__rating'), 
             av_count=Count('avaliacao__id')
         ).filter(av_count__gte=4)
 
-        if self.start:
-            objs_grouped.filter(avaliacao__create_date__gte=self.start)
-        if self.stop:
-            objs_grouped.filter(avaliacao__create_date__lte=self.stop)
+        objs_grouped = self.filter_date_objs(objs_grouped)
 
         values = [x for x in objs_grouped.order_by('-av_media')[:self.top].values('av_media', 'av_count', 'nome')]
         [values[x].update({'pos': x+1}) for x in range(len(values))]
 
         return values
 
+
+
 def criar_relatorios(start=0, stop=0):
     dict_relatorios = {
         'games_mais_avaliados': Relatorio(start, stop),
-        'usuarios_mais_avaliaram': Relatorio(start, stop, User),
+        'usuarios_mais_avaliaram': RelatorioUsers(start, stop, User),
         'categorias_mais_avaliadas': RelatorioCategorias(start, stop, Categoria, 3),
         'games_maior_media': RelatorioMediaGames(start, stop)
     }
     return dict_relatorios
 
+
+def relatorios(request, start=0, stop=0):
+    user = request.user
+
+    context = {
+        'user': user,
+        'relatorios': criar_relatorios(start, stop)
+    }
+    return render(request, 'relatorios.html', context)
