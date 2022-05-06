@@ -37,7 +37,22 @@ class BrowserGame(models.Model):
     imagem = StdImageField(
         "Imagem", null=True, blank=True, 
         upload_to='games/uploads/imgs',
-        variations={'thumbnail': (200, 200, True), 'large': (500, 500)})
+        variations={'thumbnail': (300, 250, True), 'large': (500, 500)})
+
+    create_date = models.DateTimeField(
+        "Data de Criação", auto_now_add=True, blank=True)
+
+    users_viewed = models.ManyToManyField(
+        User, 
+        verbose_name="Users Viewed")
+
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Jogo"
+        verbose_name_plural = "Jogos"
 
 
 class Avaliacao(models.Model):
@@ -56,7 +71,7 @@ class Avaliacao(models.Model):
         "Comentário", max_length=255, null=True, blank=True)
 
     create_date = models.DateTimeField(
-        "Data de Criação", auto_now=True, blank=True)
+        "Data de Criação", auto_now_add=True, blank=True)
 
     users_liked = models.ManyToManyField(
         User, 
