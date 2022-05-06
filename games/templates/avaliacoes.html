@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Relatórios Section -->
+<div class="wrap blog-grid grey" id="blog">
+    <div class="grid grid-pad">
+        <div class="content" >
+            <h2>Avaliações</h2>
+
+            {% for av in avaliacoes %}
+                {% include 'avaliacao_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- End Relatórios Section -->
+
+{% endblock %}

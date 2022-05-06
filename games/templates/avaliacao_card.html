@@ -1,0 +1,33 @@
+{% load static %}
+
+<div class="col-1-4" id="av_{{av.id}}">
+    <article class="post-wrap">
+        <div class="post-img">
+
+            <a href="#0"><img src="/media/{{av.game.imagem.thumbnail}}" alt=""></a>
+        </div>
+        <div class="post">
+            <h2 class="entry-title"><a href="#0">{{av.game.nome}}</a></h2>
+            <h4 style="margin: 10px;">{{av.game.categoria.nome}}</h4>
+
+            <div class="post-meta" style="margin-bottom: 0px;">
+                {% include 'rating_stars.html' %}
+                {{av.rating}}
+            </div>
+            <div style="font-size: 11px;">
+                <span style="color: #72aea2;">por @{{av.user.username}}<span>
+            </div>
+            <div class="descricao_anotacao">
+                {{av.comentario}}
+            </div>
+            {% if user in av.users_liked.all %}
+                <span class="marcada-util">Marcada como útil <i class="fas fa-check"></i></span>
+                <span style="float: right;"><i class="fas fa-check-circle"></i>  {{av.users_liked.count}}</span>
+
+            {% else %}
+                <a class="marcar-util" href="{% url 'marcar_como_util' av_id=av.id %}">Marcar Como Útil</a>
+                <span style="float: right;"><i class="fas fa-check-circle"></i>  {{av.users_liked.count}}</span>
+            {% endif %}
+        </div>
+    </article>
+</div>
