@@ -1,0 +1,21 @@
+{% load static %}
+
+<!-- Start of Filter section -->
+<div class="col-1-1 mix">
+    <ul class="filters" >
+        <li id="filter_default" class="filter active" data-filter=".recomendado">Recomendados</li>
+        <li class="filter" data-filter=".recente">Recentes</li>
+        <li class="filter" data-filter=".most_rated">Mais Avaliados</li>
+    </ul>
+</div>
+
+<!-- End of Filter section -->
+<div class="portfolio-items">
+    {% for section, games in games_sections.items %}
+        {% for game in games %}
+            {% include 'game_card.html' %}
+        {% endfor %}
+    {% endfor %}
+</div>
+<div class="col-1-1"><a class="btn" href="#0">Ver Mais</a></div>
+
