@@ -17,12 +17,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/rating_stars.css' %}">
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 
 </head>
 
 <!-- BODY -->
-<body class="body" id="home">
+<body class="body" id="home" onload="after_load_index()">
 
 <!-- HEADER -->
 {% include 'header.html' %}
@@ -33,6 +34,26 @@
 </div>
 <!-- FOOTER -->
 <!-- { include 'footer.html' } -->
+
+<!-- SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script>
+
+<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lightcase.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.nav.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/mixitup.js' %}"></script>
+
+<script>
+function after_load_index() {
+    /* Usada para selecionar o filtro de games Recomendados como default */
+    var filter_default = document.getElementById('filter_default');
+    if (filter_default){
+        filter_default.click();
+    }
+}
+</script>
 
 </body>
 </html>
