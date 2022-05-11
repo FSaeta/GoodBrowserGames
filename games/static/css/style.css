@@ -40,7 +40,7 @@ Grey #ECF0F1
 
 .wrap {
   width: 100%;
-  padding: 3.5em 0;
+  padding-bottom: 4.5em;
 }
 
 .grey {
@@ -71,7 +71,7 @@ body {
   font-weight: normal;
 }
 
-body, input, textarea {
+body, input, textarea, select{
   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 }
 
@@ -158,6 +158,15 @@ blockquote p {
   stroke: #ECF0F1;
 }
 
+.errorlist {
+    color: red;
+    width: 70%;
+    margin: auto;
+    border-radius: 8px;
+    border: 2px red solid;
+    background-color: yellow;
+}
+
 /* *********************************************************
   Buttons 
 ********************************************************* */
@@ -174,6 +183,7 @@ blockquote p {
      -moz-border-radius: 30px;
           border-radius: 30px;
   background:#1abc9c;
+  cursor: pointer;
 }
 
 .btn:hover, .btn:focus, .btn-current {
@@ -342,7 +352,7 @@ blockquote p {
 }
 
 .header-home {
-  background: transparent;
+  background: black;
 /*box-shadow*/
   -webkit-box-shadow: none;
      -moz-box-shadow: none;
@@ -560,6 +570,13 @@ blockquote p {
   color: #fff;
 }
 
+#login-form p {
+    margin-bottom: 0px;
+}
+.login-btn {
+    padding: 20px 30px;
+    font-size: 18px;
+}
 /* *********************************************************
   Services Section
 ********************************************************* */
@@ -620,7 +637,7 @@ blockquote p {
   text-align: center;
 }
 
-.recent-work {
+.game-card {
   background: #6578bc; /* Old browsers */
   background: -moz-linear-gradient(left,  #6578bc 0%, #1abc9c 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, right top, color-stop(0%,#6578bc), color-stop(100%,#1abc9c)); /* Chrome,Safari4+ */
@@ -672,12 +689,12 @@ blockquote p {
   color: #1abc9c;
 }
 
-.recent-work a {
+.game-card a {
   position: relative;
   display: block;
 }
 
-.recent-work img {
+.game-card img {
   width: 100%;
   margin-bottom: -9px;
 /*border-radius*/
@@ -686,7 +703,7 @@ blockquote p {
           border-radius: 5px;
 }
 
-.recent-work:hover img {
+.game-card:hover img {
   opacity: .35;
 }
 
@@ -708,12 +725,12 @@ blockquote p {
   font-size: 1.2em;
 }
 
-.recent-work:hover .overlay {
+.game-card:hover .overlay {
   opacity: 1;
   transform: scale(1);
 }
 
-.recent-work .work-info {
+.game-card .work-info {
   margin-top: 23px;
 }
 
@@ -857,6 +874,30 @@ blockquote p {
      -moz-border-radius: 5px;
           border-radius: 5px;
   background: #fff;
+  border: 5px solid #808080;
+}
+
+.descricao_anotacao {
+    font-size: 13px;
+    text-align: left;
+    height: 90px;
+    border: 1px solid rgb(167, 220, 239);
+    padding: 4px;
+    margin-bottom: 5px;
+}
+span.marcada-util {
+    color: rgb(0, 0, 180);
+    padding: 4px 10px;
+    background-color: #ddd9d9;
+    border-radius: 10px;
+    font-size: 14px;
+}
+a.marcar-util {
+    color: white;
+    padding: 4px 10px;
+    background-color: #7df77d;
+    border-radius: 10px;
+    font-size: 14px;
 }
 
 .post-wrap img {
@@ -1286,9 +1327,9 @@ ul.nested-comments  ul li {
 }
 /* Inputs */
 
-input:not([type=submit]):not([type=file]), textarea {
+input:not([type=submit]):not([type=file]), textarea, select {
   width: 100% !important;
-  height: 50px;
+  height: 40px;
   margin-bottom: 25px;
   padding: 0 15px 2px;
   border: 2px solid #ebebeb;
@@ -1302,7 +1343,7 @@ input:not([type=submit]):not([type=file]), textarea {
   transition: box-shadow 0.3s;
 }
 
-input:not([type=submit]):not([type=file]):focus, textarea:focus {
+input:not([type=submit]):not([type=file]):focus, textarea:focus, select:focus {
   border-color:#1abc9c;
   outline: none;
 }
@@ -1334,7 +1375,7 @@ textarea {
   margin-top: 3em;
 }
 
-input:not([type=submit]):not([type=file]):focus, textarea:focus {
+input:not([type=submit]):not([type=file]):focus, textarea:focus, select:focus {
   -webkit-animation: rubberBand 0.5s 1;
      -moz-animation: rubberBand 0.5s 1;
        -o-animation: rubberBand 0.5s 1;
@@ -1350,8 +1391,12 @@ footer {
 }
 
 footer .grid {
-  padding-top: 6em;
+  padding-top: 1em;
 }
+
+footer.wrap {
+    padding-bottom: 1em;
+  }
 
 footer h3 {
   color: #fff;
@@ -1377,40 +1422,6 @@ footer p, footer a {
   margin-left: 20px;
 }
 
-/* Flickr Widget */
-.footer-widget .flickr-list {
-  margin-left: 0;
-}
-
-.flickr-list li {
-  position: relative;
-  display: inline-block;
-  margin: 0 3px 3px 0;
-  padding: 0;
-  border: 0;
-}
-
-.flickr-list li:before {
-  content: '' !important;
-}
-
-.flickr-list li:before {
-  border: none;
-}
-
-.flickr-list li a {
-  display: block;
-}
-
-.flickr-list li img {
-  width: 70px;
-  height: 70px;
-/*border-radius*/
-  -webkit-border-radius: 5px;
-     -moz-border-radius: 5px;
-          border-radius: 5px;
-}
-
 .social-set {
   width: 100%;
   margin: 0 0 .5em;
@@ -1426,6 +1437,7 @@ footer p, footer a {
 
 .copyright {
   text-align: center;
+  display: none;
 }
 
 /*------------------------------------------------------------- 
