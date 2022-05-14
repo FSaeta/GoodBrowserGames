@@ -43,7 +43,7 @@ class BrowserGame(models.Model):
         "Data de Criação", auto_now_add=True, blank=True)
 
     users_viewed = models.ManyToManyField(
-        User, 
+        User, blank=True,
         verbose_name="Users Viewed")
 
 
@@ -74,7 +74,7 @@ class Avaliacao(models.Model):
         "Data de Criação", auto_now_add=True, blank=True)
 
     users_liked = models.ManyToManyField(
-        User, 
+        User, blank=True,
         verbose_name="Users Liked",
         related_name="liked_avaliacoes")
 
