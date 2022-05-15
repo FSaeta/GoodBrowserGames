@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Relatórios Section -->
+<div class="wrap blog-grid grey" id="blog">
+    <div class="grid grid-pad">
+        <div class="content" >
+            <h2>Relatórios</h2>
+
+            <!-- Selecionar período do relatório-->
+            <form method="POST" action="{% url 'relatorios' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="periodos-relatorios" style="padding:0px 30px;">
+                    <div class="col-5-12">
+                        <label for="start" style="color: #1abc9c;">Período Inicial</label>
+                        <input type="date" name="start" id="start_period" value={{str_start}}>
+                    </div>
+                    <div class="col-5-12">
+                        <label for="stop" style="color: #1abc9c;">Período Final</label>
+                        <input type="date" name="stop" id="stop_period" value={{str_stop}}>
+                    </div>
+                    <div class="col-2-12">
+                        <input type="submit" name="refresh-period" class="read-more btn" 
+                            id="refresh-period" value="Aplicar Filtro"
+                            style="margin-top: 30px; border-style: none;">
+                    </div>
+                </div>
+            </form>
+
+            {% for id_rel, relatorio in relatorios.items %}
+            <div class="col-1-2" >
+                <article class="post-wrap">
+                    <div class="post">
+                        <h2 class="entry-title">{{relatorio.nome}}</h2>
+                        <hr>
+
+                        <table class="report-content" style="width: 100%;">
+                            <thead>
+                                <tr class="report-header" style="line-height: 20px; font-weight: bold;">
+                                    <th style="width: 10%;"></th>
+                                    <th style="width: 60%; vertical-align: middle;">{{relatorio.object_label}}</th>
+                                    <th style="width: 30%;">{{relatorio.value_label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for linha in relatorio.objects %}
+                                    <tr class="report-line" style="border-bottom: 1px solid #b3b3b3;">
+                                        <td style="width: 10%;">{{linha.pos}}</td>
+                                        <td style="width: 60%;">{{linha.nome}}</td>
+                                        <td style="width: 30%;">{{linha.valor}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- End Relatórios Section -->
+
+{% endblock %}
