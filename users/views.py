@@ -53,9 +53,9 @@ class Relatorio:
 
     def filter_date_objs(self, objs):
         if self.start:
-            objs.filter(avaliacao__create_date__gte=self.start)
+            objs = objs.filter(avaliacao__create_date__gte=self.start)
         if self.stop:
-            objs.filter(avaliacao__create_date__lte=self.stop)
+            objs = objs.filter(avaliacao__create_date__lte=self.stop)
         return objs
     
     def ajustar_linhas(self, values):
@@ -79,9 +79,9 @@ class RelatorioCategorias(Relatorio):
             av_count=Count('browsergame__avaliacao__id')
         )
         if self.start:
-            objs_grouped.filter(browsergame__avaliacao__create_date__gte=self.start)
+            objs_grouped = objs_grouped.filter(browsergame__avaliacao__create_date__gte=self.start)
         if self.stop:
-            objs_grouped.filter(browsergame__avaliacao__create_date__lte=self.stop)
+            objs_grouped = objs_grouped.filter(browsergame__avaliacao__create_date__lte=self.stop)
 
         values = self.get_objects_vals(objs_grouped)
         values = [LinhaRelatorio(v['pos'], v['nome'], v['av_count']) for v in values]
@@ -136,7 +136,7 @@ class RelatorioMediaGames(Relatorio):
         return values
 
     def value_label(self):
-        return 'Nota Média Avaliações'
+        return 'Nota Média'
 
 
 def criar_relatorios(start=0, stop=0):
@@ -159,14 +159,19 @@ def relatorios(request, start=0, stop=0):
             str_start = request.POST.get('start', 0)
             str_stop = request.POST.get('stop', 0)
 
-            return redirect(f'/user/relatorios/start={str_start}/stop={str_stop}')
+            return redirect(f'/user/relatorios/start={str_start or "0"}/stop={str_stop or "0"}')
 
-    if start:
+    if start and start != '0':
         str_start = start
         start = datetime.datetime.strptime(start, '%Y-%m-%d')
-    if stop:
+    elif start == '0':
+        start = 0
+
+    if stop and stop != '0':
         str_stop = stop
         stop = datetime.datetime.strptime(stop, '%Y-%m-%d')
+    elif stop == '0':
+        stop = 0
 
     context = {
         'user': user,
