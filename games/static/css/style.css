@@ -198,6 +198,15 @@ blockquote p {
           animation: rubberBand .8s 1;
 }
 
+.searchbar-container {
+  text-align: left;
+}
+
+.searchbar-container .checkbox-search {
+  margin-bottom: 8px;
+  height: 30px;
+}
+
 @-webkit-keyframes rubberBand {
   0% {
     -webkit-transform: scale3d(1, 1, 1);

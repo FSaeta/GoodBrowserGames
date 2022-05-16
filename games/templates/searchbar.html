@@ -1,0 +1,30 @@
+
+{% load static %}
+
+<form action="{% url 'games' page=1 %}" method="post">
+    {% csrf_token %}
+    <div class="searchbar-container col-9-12">
+        <!-- Options da busca -->
+        <div class="search-selection-filters">
+            <div class="col-1-2">
+                <label for="filter" style="width: 40% !important;">Buscar Games por:</label>
+                <select class="checkbox-search" type="checkbox" name="filter" style="width: 90% !important;">
+                    {% for option in filter_options %}
+                        <option value="{{option.option}}" {% if option.option == filter_by %}selected{% endif %}>{{option.str}}</option>                                       
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-1-2">
+                <label for="orderby">Ordenar por:</label>
+                <select class="checkbox-search" type="checkbox" name="orderby" style="width: 90% !important;">
+                    {% for option in order_options %}
+                        <option value="{{option.option}}" {% if option.option == order_by %}selected{% endif %}>{{option.str}}</option>               
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <input type="text" name="search" style="width: 80% !important;" {% if search_by %}value="{{search_by}}" {% endif %}/> 
+        <input type="submit" name="search_submit" class="read-more btn" 
+               value="Buscar" style="border-style: none;">
+    </div>
+</form>
