@@ -10,5 +10,6 @@ urlpatterns = [
     path('games-<int:page>/orderby=<str:orderby>/filter=<str:filter>', games, name='game_search'),
     path('games-<int:page>/orderby=<str:orderby>/filter=<str:filter>/search=<str:search>', games, name='game_search'),
     path('avaliacoes', avaliacoes, name='avaliacoes'),
-    path('marcar_como_util/<int:av_id>', marcar_como_util, name='marcar_como_util')
+    path('marcar_como_util/<int:av_id>', marcar_como_util, name='marcar_como_util'),
+    path('marcar_como_util/<int:av_id>/<int:game_page>', marcar_como_util, name='marcar_como_util_game_page')
 ]

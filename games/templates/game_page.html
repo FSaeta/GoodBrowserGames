@@ -57,7 +57,13 @@
             </div>
 
             <h2>Avaliações</h2>
-
+            {% if avaliacoes %}
+                {% for av in avaliacoes %}
+                    {% include 'avaliacao_card.html' %}
+                {% endfor %}
+            {% else %}
+                Não há avaliações para mostrar.
+            {% endif %}
 
         </div>
     </div>

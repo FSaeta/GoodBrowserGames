@@ -894,7 +894,7 @@ blockquote p {
      -moz-border-radius: 5px;
           border-radius: 5px;
   background: #fff;
-  border: 5px solid #808080;
+  border: 3px solid #9f9f9f;
 }
 
 .descricao_anotacao {

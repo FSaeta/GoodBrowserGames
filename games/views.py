@@ -93,7 +93,7 @@ def avaliacoes(request):
 
     avaliacoes = Avaliacao.objects.annotate(
         likes_count=Count('users_liked'),
-    ).order_by('-likes_count', '-rating')
+    ).exclude(user=user).order_by('-likes_count', '-rating')
 
     likes_dict = {av.id: user in av.users_liked.all() for av in avaliacoes}
 
@@ -105,7 +105,7 @@ def avaliacoes(request):
     }
     return render(request, 'avaliacoes.html', context)
 
-def marcar_como_util(request, av_id):
+def marcar_como_util(request, av_id, game_page=False):
     user = request.user
     if not user.is_authenticated:
         return redirect('/')
@@ -113,7 +113,13 @@ def marcar_como_util(request, av_id):
     av = Avaliacao.objects.get(id=av_id)
     if not user in av.users_liked.all():
         av.users_liked.add(user)
-    return redirect(f'/avaliacoes#av_{av_id}')
+    
+    if game_page:
+        redirect_url = f'/games/game_id={av.game.id}#av_{av_id}'
+    else:
+        redirect_url = f'/avaliacoes#av_{av_id}'
+
+    return redirect(redirect_url)
 
 class UserAv:
     def __init__(self, av, modify=True):
@@ -128,6 +134,8 @@ def game_page(request, pk, edit=False):
         av_media=Avg('avaliacao__rating')).get(pk=pk)
 
     user_av = game.avaliacao_set.filter(user=user)
+    avaliacoes = game.avaliacao_set.exclude(user=user)
+
     user_av = UserAv(user_av.first(), edit)
 
     context = {
@@ -137,8 +145,10 @@ def game_page(request, pk, edit=False):
         'user_av': [user_av],
         'user_av_obj': user_av.av,
         'user_av_form': AvaliacaoForm(instance=user_av.av) if user_av.av else AvaliacaoForm(),
+        'avaliacoes': avaliacoes,
         'range1_5': [x for x in range(1, 6)],
-        'range6_1': [x for x in range(5, 0, -1)]
+        'range6_1': [x for x in range(5, 0, -1)],
+        'game_page': True,
     }
     return render(request, 'game_page.html', context)
 
