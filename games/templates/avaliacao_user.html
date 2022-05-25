@@ -1,0 +1,45 @@
+{% load static %}
+
+{% if edit %}
+<div class="col-1-1" id="user_av" style="border: 1px solid #dfdddd; padding: 0; border-radius: 5px;">
+    <article class="post-wrap" style="border: none;">
+        <div class="post">
+
+            <form class="validate-form login-form" action="{% url 'fazer_avaliacao' game_id=game.id %}" method="POST">
+                {% csrf_token %}
+
+                {% include 'rating_stars.html' %}
+
+                <input type="number" name="user" 
+                       value="{{user.id}}" style="display: none;">
+
+                <input type="number" name="game" 
+                       value="{{game.id}}" style="display: none;">
+
+                {{user_av_form.as_p}}
+
+                <input type="submit" name="save_avaliacao" class="read-more btn" 
+                       value="Salvar" style="border-style: none;">
+            </form>
+        </div>
+    </article>
+</div>
+{% else %}
+<div class="col-1-1" id="user_av" style="border: 1px solid #dfdddd; padding: 0; border-radius: 5px;">
+    <article class="post-wrap" style="border: none;">
+        <div class="post">
+            <div style="margin-top: 30px;">
+                <div class="validate-form login-form">
+                    {% include 'rating_stars.html' %}
+
+                    <div class="descricao_anotacao">
+                        {{av.av.comentario}}
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'game_page_edit' pk=game.id edit=1 %}" class="btn" style="margin-top: 30px;">Editar Avaliação</a>
+        </div>
+    </article>
+</div>
+{% endif %}

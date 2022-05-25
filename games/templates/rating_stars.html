@@ -1,7 +1,7 @@
 
 {% if not av.modify %}
     {% for x in range1_5 %}
-        {% if x <= av.rating %}
+        {% if x <= av.av.rating %}
             <span><i class="fas fa-star" style="color: yellow; font-size: 1.5rem;"></i></span>
         {% else %}
             <span><i class="fas fa-star" style="color: #d5d5d5; font-size: 1.5rem;"></i></span>
@@ -9,9 +9,9 @@
     {% endfor %}
 
 {% else %}
-<fieldset class="rating">
-    {% for x in range1_5 %}
-        {% if x != av.rating %}
+<fieldset class="rating" style="margin-left: 15%;">
+    {% for x in range6_1 %}
+        {% if x != av.av.rating %}
             <input type="radio" id="star{{x}}" name="rating" value="{{x}}"/>
         {% else %}
             <input type="radio" id="star{{x}}" name="rating" value="{{x}}" checked/>
@@ -20,21 +20,3 @@
     {% endfor %}
 </fieldset>
 {% endif %}
-
-
-{% comment %} <fieldset class="rating">
-    <input type="radio" id="star5" name="rating" value="5" />
-    <label class="full" for="star5"></label>
-    
-    <input type="radio" id="star4" name="rating" value="4"/>
-    <label class="full" for="star4"></label>
-    
-    <input type="radio" id="star3" name="rating" value="3" />
-    <label class = "full" for="star3" title="Meh - 3 stars"></label>
-    
-    <input type="radio" id="star2" name="rating" value="2" checked/>
-    <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
-    
-    <input type="radio" id="star1" name="rating" value="1" />
-    <label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-</fieldset> {% endcomment %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Games Section -->
+<div class="wrap blog-grid grey" id="blog">
+    <div class="grid grid-pad">
+        <div class="content" >
+            <h2 style="margin: 0; margin-bottom: 30px;">{{game.nome}}</h2>
+            
+            <div class="game-sheet">
+                <div class="col-1-3">
+                    <img src="/media/{{game.imagem.large}}" alt="" style="width:100%;">
+                    <span style="font-weight: bold;">Nota Média: {{game.av_media}}</span>
+                </div>
+                <div class="col-1-3 game-info" style="text-align: left;">
+                    <span>Categoria:</span> {{game.categoria.nome}}<br/>
+                    <span>Descrição:</span> {{game.descricao}}<br/>
+                    <span>URL do Jogo:</span> <a href="{{game.game_url}}">{{game.game_url}}</a><br/>
+                    <span>Vídeo do Jogo:</span>
+                    {% if game.video_url %}
+                        <a href="{{game.video_url}}">{{game.video_url}}</a><br/>
+                    {% else %}
+                        Não possui url cadastrada<br/>
+                    {% endif %}
+                </div>
+                <div class="col-1-3">
+                    <span style="font-weight: bold; font-size: 16px;">Sua Avaliação</span>
+                    
+                    {% if user_av_obj %}
+                        <div id="editar_av_container">
+                            {% for av in user_av %}
+                                {% include 'avaliacao_user.html' %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% if not edit %}
+                            <div id="sem_av_container">
+                                <br/>
+                                <span>
+                                    Você ainda não avaliou este jogo
+                                </span>
+                                <br/>
+                                <a href="{% url 'game_page_edit' pk=game.id edit=1 %}" class="btn" style="margin-top: 30px;">Nova Avaliação</a>
+                            </div>
+                        {% else %}
+                            <div id="editar_av_container">
+                                {% for av in user_av %}
+                                    {% include 'avaliacao_user.html' %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <h2>Avaliações</h2>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

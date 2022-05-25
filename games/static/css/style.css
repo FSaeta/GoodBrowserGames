@@ -184,6 +184,7 @@ blockquote p {
           border-radius: 30px;
   background:#1abc9c;
   cursor: pointer;
+  border-style: none;
 }
 
 .btn:hover, .btn:focus, .btn-current {
@@ -205,6 +206,16 @@ blockquote p {
 .searchbar-container .checkbox-search {
   margin-bottom: 8px;
   height: 30px;
+}
+
+.game-info span {
+  font-weight: bold;
+}
+.game-sheet {
+  border: 2px solid rgb(194, 194, 194);
+  display: flex;
+  padding: 10px 15px;
+  background-color: white;
 }
 
 @-webkit-keyframes rubberBand {

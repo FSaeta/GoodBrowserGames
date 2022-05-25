@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
-from django.db.models import Count
+from django.db.models import Count, Avg
 from .models import *
+from .forms import AvaliacaoForm, NewAvaliacaoForm
 from users.models import Pais
 
 def index(request):
@@ -113,3 +114,52 @@ def marcar_como_util(request, av_id):
     if not user in av.users_liked.all():
         av.users_liked.add(user)
     return redirect(f'/avaliacoes#av_{av_id}')
+
+class UserAv:
+    def __init__(self, av, modify=True):
+        self.av = av
+        self.modify = modify
+
+def game_page(request, pk, edit=False):
+    user = request.user
+    edit = bool(edit)
+    
+    game = BrowserGame.objects.annotate(
+        av_media=Avg('avaliacao__rating')).get(pk=pk)
+
+    user_av = game.avaliacao_set.filter(user=user)
+    user_av = UserAv(user_av.first(), edit)
+
+    context = {
+        'user': user,
+        'game': game,
+        'edit': edit,
+        'user_av': [user_av],
+        'user_av_obj': user_av.av,
+        'user_av_form': AvaliacaoForm(instance=user_av.av) if user_av.av else AvaliacaoForm(),
+        'range1_5': [x for x in range(1, 6)],
+        'range6_1': [x for x in range(5, 0, -1)]
+    }
+    return render(request, 'game_page.html', context)
+
+def fazer_avaliacao(request, game_id):
+    user = request.user
+    game = BrowserGame.objects.get(pk=game_id)
+
+    force_redirect = request.method == 'GET' or \
+                     not user.is_authenticated
+
+    if force_redirect:
+        return redirect('/')
+
+    if user.id in [x['user'] for x in game.avaliacao_set.values('user')]:
+        avaliacao = game.avaliacao_set.get(user=user)
+        form = NewAvaliacaoForm(request.POST, instance=avaliacao)
+        form.save()
+    else:
+        form = NewAvaliacaoForm(request.POST, request.FILES)    
+        if form.is_valid():
+            avaliacao = form.save()
+
+    return redirect(f'/games/game_id={game_id}')
+    
