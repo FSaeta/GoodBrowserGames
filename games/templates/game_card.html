@@ -7,11 +7,10 @@
             <div class="overlay">
                 <span>{{game.categoria.nome}}</span>
                 <h2>
-                    <a class="img-wrap" data-rel="lightcase:{{section}}" 
-                       title="{{game.nome}} - {{game.categoria.nome}}" 
-                       href="/media/{{game.imagem.thumbnail}}">
-
-                        {{game.nome}}
+                    <a class="img-wrap"
+                        title="{{game.nome}} - {{game.categoria.nome}}"
+                        href="{% url 'game_page' pk=game.id %}">
+                    {{game.nome}}
                     </a>
                 </h2>
             </div>
