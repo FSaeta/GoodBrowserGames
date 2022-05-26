@@ -64,7 +64,7 @@ def games(request, page=1, orderby='-create_date', filter='nome', search=False):
 
             return redirect(redirect_page)
 
-    if orderby == 'recomendados':
+    if orderby == 'recomendados' and user.is_authenticated:
         games_to_show = user.get_games_recomendados(120, False)
     else:
         games_to_show = BrowserGame.objects.order_by(orderby)
