@@ -127,6 +127,34 @@ class User(AbstractUser):
         return categ_list
 
     def get_games_recomendados(self, limit, not_seen_only=True):
+        """ Função utilizada a partir de um usuário  para obter os games recomendados para esse usuário. 
+        1- Primeiramente é criada uma lista ordenada contendo as categorias em ordem de maior média das 
+        avaliações realizadas pelo usuário. 
+        
+        2- Depois essa lista é separada entre 2 listas, uma contendo o top3 das categorias para mostrar primeiro
+        games dessas categorias até que não tenha mais, quando acabam, games das outras categorias, também em ordem
+        de maior média são selecionados. 
+        
+        3- Os games vão sendo adicionados a uma lista ordenada para quais games devem mostrar primeiro até que 
+        a quantidade de games adicionados seja igual ao limite de games por página ou não existam mais games a mostrar.
+
+        4- As top 3 categorias possuem um peso específico para intercalar os games da categoria e não mostrar somente
+        games da categoria melhor avaliada. A top 1 seleciona 4 games na primeira vez, a top 2 seleciona 3 games e a top 3
+        seleciona 2 games, e essa rotina se repete até acabar os games recomendados das top3 categorias, o resto é recomendado
+        intercalando de 3 em 3 jogos por categoria fora do top 3 categorias. 
+        
+        5- Uma lista de ids de games que ja foram adicionados é utilizada para ignorar que o mesmo game seja 
+        adicionado novamente. Caso o parâmetro 'not_seen_only' seja True, games que o usuário ja avaliou não
+        serão mostrados, a menos que tenham acabado os games que ele não tenha avaliado, então esses games são
+        adicionados na ordem que foram ignorados até satisfazer o limite ou acabarem os games.
+
+        Args:
+            limit (int): limite de objetos que serão retornados
+            not_seen_only (bool): obter apenas games que o usuário não avaliou
+
+        Returns:
+            list: lista ordenada pelos games mais recomendados
+        """
         # Obtendo objetos dos games
         Game = apps.get_model('games', 'BrowserGame')
 
@@ -135,11 +163,13 @@ class User(AbstractUser):
         # Obtém as top3 categorias preferidas pelo usuário
         top3_preferidas = [categs_preferidas.pop(0) for i in range(3 if 3 < len(categs_preferidas) else len(categs_preferidas))]
 
+        ignored_games = []
         # Lista utilizada para mostrar quais games serão mostrados como recomendados
         games_to_show = []
         # Adicionamos games na lista enquanto a lista for menor que o limite, ou houverem games
         # a serem mostrados
         categ_index = 0
+
         while len(games_to_show) != limit and (categs_preferidas or top3_preferidas):
             # o peso determina quantos games serão selecionados da categoria
             peso = 4 - categ_index if top3_preferidas else 3
@@ -147,13 +177,17 @@ class User(AbstractUser):
             # Caso ainda existam categorias no top3, será utilizada uma de lá, se ja tiverem
             # acabado os games das top3 será recomendado games de outras categorias.
             categs = top3_preferidas or categs_preferidas
+
             categ = categs.pop(categ_index)
 
             games_ids = [game.id for game in games_to_show]
             # Se devemos buscar apenas por novos jogos, como ocorre na pág principal
-            if not_seen_only and (categs or categs_preferidas):
+            if not_seen_only:
                 games_ignored = Game.objects.filter(avaliacao__user__id=self.id, categoria=categ['categ_id'])
-                games_ids.extend((x[0] for x in games_ignored.values_list('id')))
+                ids_ignored = [x[0] for x in games_ignored.values_list('id')[:peso]]
+                # lista de ids que serão ignorados, incluindo os games que ja foram adicionados
+                games_ids.extend(ids_ignored)
+                ignored_games.extend(games_ignored[:peso])
             else:
                 games_ignored = []
 
@@ -176,6 +210,12 @@ class User(AbstractUser):
                 categ_index = 0
             if categ_index >= len(categs):
                 categ_index = 0
+
+        # Caso o limite não tenha atingido por conta dos games que ja foram avaliados
+        # inclui games que são recomendados e que o usuário já avaliou
+        if len(games_to_show) != limit and ignored_games:
+            ignored_games = ignored_games[:(limit - len(games_to_show))]
+            games_to_show.extend(ignored_games)
 
         return games_to_show
 
